@@ -12,6 +12,9 @@ This **Calendar App** integrates seamlessly with **Google Cloud** to manage even
 - 🔔 **Reminders**: Set reminders for important events.
 - 📈 **Recurring Events**: Create events that recur on a regular basis.
 
+## UI
+![UI Image](UI.png)
+
 ## Tech Stack 💻
 
 - **Frontend**: PyQt6
@@ -100,4 +103,4 @@ Feel free to fork this repository, raise issues, and submit pull requests. Contr
 
 This project is licensed under the **MIT License**.
 
-![UI Image](UI.png)
+
