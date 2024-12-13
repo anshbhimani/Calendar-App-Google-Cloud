@@ -152,7 +152,7 @@ class CustomCalendarWidget(QCalendarWidget):
 class CalendarWidget(QWidget):
     def __init__(self):
         super().__init__()
-        self.API_URL = "http://localhost:5000"
+        self.API_URL = "http://localhost:9876"
         self.events_by_date = {}  # Store events by date
         self.initUI()
         self.set_window_properties()
@@ -168,6 +168,13 @@ class CalendarWidget(QWidget):
         screen_geometry = QApplication.primaryScreen().geometry()
         self.setGeometry(QRect(screen_geometry.width() - 300, 0, 300, screen_geometry.height()))
 
+    def changeEvent(self, event):
+        if event.type() == Qt.QEvent.Type.WindowStateChange:
+            if self.isMinimized():
+                # Prevent minimizing by restoring the window state
+                self.setWindowState(self.windowState() & ~Qt.WindowState.WindowMinimized)
+        super().changeEvent(event)
+    
     def initUI(self):
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | 
                             Qt.WindowType.WindowStaysOnTopHint | 
