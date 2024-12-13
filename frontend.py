@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
                             QTimeEdit, QScrollArea, QFrame, QDialog, QTextEdit,
                             QFileDialog, QGroupBox, QToolButton)
 from PyQt6.QtCore import Qt, QTime, QTimer, QDate, QRect,QEvent
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QColor,QBrush
 
 class EventDialog(QDialog):
     def __init__(self, parent=None):
@@ -134,20 +134,22 @@ class CustomCalendarWidget(QCalendarWidget):
     def paintCell(self, painter, rect, date):
         super().paintCell(painter, rect, date)  # Call the base class method to draw the cell
 
-        # Use the same color for all events
+        today = QDate.currentDate()
+        if date == today:
+                painter.setBrush(QBrush())  # Set the background color to yellow
+                painter.setPen(QColor('orange'))  # No outline for the cell
+                painter.drawRect(rect)  # Draw a filled rectangle to highlight the cell
+                
+             # Use the same color for all events
         if date.toPyDate() in self.parent().events_by_date:
             painter.setBrush(QColor('#3498DB'))  # Blue color for events
             painter.setPen(Qt.PenStyle.NoPen)  # No outline for the marker
             marker_size = 6
-            
-            # Ensure all coordinates are cast to int
             x = int(rect.center().x() - marker_size / 2)
             y = int(rect.bottom() - marker_size - 2)
             width = int(marker_size)
             height = int(marker_size)
-
             painter.drawEllipse(x, y, width, height)  # Draw the event marker
-
 
 class CalendarWidget(QWidget):
     def __init__(self):
@@ -203,6 +205,9 @@ class CalendarWidget(QWidget):
             }
         """)
 
+        # Button to jump to today's date
+        today_btn = QPushButton("Go to Today")
+        today_btn.clicked.connect(self.jump_to_today)
 
         add_btn = QPushButton("Add Event")
         add_btn.clicked.connect(self.show_event_dialog)
@@ -235,6 +240,7 @@ class CalendarWidget(QWidget):
         
         container_layout = QVBoxLayout()
         container_layout.addWidget(self.calendar)
+        container_layout.addWidget(today_btn)  # Add the "Go to Today" button
         container_layout.addWidget(self.toggle_button)
         container_layout.addWidget(add_btn)
         container_layout.addWidget(events_label)
@@ -248,6 +254,11 @@ class CalendarWidget(QWidget):
         self.refresh_timer.start(60000)  # Refresh every minute
         
         self.fetch_events()
+        
+    def jump_to_today(self):
+        today = QDate.currentDate()
+        self.calendar.setSelectedDate(today)  # Select today's date
+        self.update_events_list()  # Update the event list for today
         
     def toggle_event_details(self):
         # Toggle visibility of the event details group
