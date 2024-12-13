@@ -90,10 +90,13 @@ Follow these steps to set up the Calendar App on your local machine:
 
 To ensure the app runs every time you start your PC:
 
-- Use **Task Scheduler** (Windows):
-   1. Open Task Scheduler.
-   2. Create a new task, pointing to the `main.py` script for the PyQt6 frontend and `flask run` for the backend.
-   3. Set triggers and options to run at startup and minimize to background.
+To ensure the app runs every time you start your PC, use the Startup folder:
+
+1. Create a shortcut for the main.py script and the flask run command.
+2. Place the shortcuts in the Startup folder:
+      i. Open Run (Windows + R) and type shell:startup to open the Startup folder.
+      ii. Paste the shortcut for main.py and flask run into this folder.
+3. This will ensure the app starts automatically when you log into your system.
 
 ## Contributions 🛠️
 
